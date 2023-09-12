@@ -1,0 +1,51 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(tidyverse)
+```
+
+# fakecountry
+
+> A completely made up country consisting of smaller geographical areas to illustrate spatial statistical methods. Because... why not?
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+
+This is what I did:
+
+1. Create a set of random points that will serve as the centroids for the areas.
+2. Create a [Voronoi Diagram](https://en.wikipedia.org/wiki/Voronoi_diagram) to create polygons based on these points.
+3. Limit the Voronoi diagram to a bounding box to represent the country's borders. I used an irregular pentagon for this purpose, to make it more natural looking.
+4. Look out for very small slivers of areas which are not very realistic. Any areas with measure less than a threshold are excluded.
+5. Save the polygons to a shapefile (in the data folder).
+
+The actual script to generate the fake country is in Python. 
+To load it in R, do the following.
+
+```{r}
+library(sf)
+fakecountry <- read_sf("data/fakecountry/", quiet = TRUE)
+fakecountry
+```
+
+## Plot
+
+```{r, eval = -1}
+library(tidyverse)
+ggplot(fakecountry) +
+  geom_sf(aes(fill = id)) +
+  scale_fill_viridis_c(option = "turbo") +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(title = "My fake country",
+       subtitle = "Ready for analysis!")
+```
